@@ -108,7 +108,7 @@ class Star:
 					reversedRotation = random.randint(0,20)==1
 					p.moons.append([t, reversedRotation])
 					
-			if p.radius >= 10: p.gas_giant = random.randint(0,25) == 1
+			if p.radius >= 10: p.gas_giant = random.randint(0,20) == 1
 			if not p.gas_giant:
 					p.water = random.randint(0,150) == 1
 					if p.water:
@@ -117,10 +117,15 @@ class Star:
 			p.ring = random.randint(0,10) == 1
 			p.temperature = random.randint(0, 400)
 
-			p.gases = random.random()
-			p.minerals = random.random()
-			p.resources = random.random()
-			if p.gas_giant: p.gases = 100
+			
+			if p.gas_giant:
+				p.gases = 1.0
+				p.minerals = 0.0
+				p.resources = 0.0
+			else:
+				p.gases = random.random()
+				p.minerals = random.random()
+				p.resources = random.random()
 			final = 1.0 / (p.gases + p.minerals + p.resources)
 			p.gases *= final * 100
 			p.minerals *= final * 100
