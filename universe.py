@@ -1,3 +1,4 @@
+from settings import *
 import pygame
 import random
 import pyperclip
@@ -6,36 +7,14 @@ import os
 import time
 from math import cos, sin
 
-#segment size
-SEGMENTS = 40
-
-#best resolution
-WIDTH = 1240 
-HEIGHT = 720
-
-HALF_WIDTH = WIDTH//2
-HALF_HEIGHT = HEIGHT//2
-
-SECTORS_X = WIDTH//SEGMENTS
-SECTORS_Y = HEIGHT//SEGMENTS
-
 pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = '1' #center window
 clock = pygame.time.Clock()
 win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Universe!")
-
-WHITE = pygame.Color("white")
-BLACK = pygame.Color("black")
-RED = pygame.Color("red")
-BLUE = pygame.Color("blue")
-GREEN = pygame.Color("green")
-GRAY = pygame.Color("gray")
-BROWN = pygame.Color("brown")
-GAS = pygame.Color("#aa7700")
+pygame.display.set_caption(TITLE)
 
 colors = [pygame.Color("red"), pygame.Color("purple"), pygame.Color("pink"),
-				pygame.Color("white"), pygame.Color("yellow"), pygame.Color("lightblue")]
+		pygame.Color("white"), pygame.Color("yellow"), pygame.Color("lightblue")]
 
 abc = "abcdefghijklmnopqrstuvwxyz"
 
@@ -373,13 +352,13 @@ while running:
 	
 	try:
 			cords = font.render(f"X:{str(cam.x)}, Y: {str(cam.y)}", True, WHITE)
-			win.blit(cords, (0,0))
+			win.blit(cords, CORD_POS)
 	except:
 			cords = font.render(f"You are too far from the center. Don't get lost", True, WHITE)
-			win.blit(cords, (0,0))
+			win.blit(cords, CORD_POS)
 
 	fps = font.render(f"FPS: {str(int(clock.get_fps()))}", True, WHITE)
-	win.blit(fps, (0, 30))
+	win.blit(fps, FPS_POS)
 
 	pygame.display.flip()
 	for event in pygame.event.get():
