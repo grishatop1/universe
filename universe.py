@@ -62,7 +62,7 @@ class Planet:
 
 class Star:
 	def __init__(self, x, y, generateSystem=True):
-		seed = (x & REALLY_BIG_NUMBER) << 16 | (y & REALLY_BIG_NUMBER)
+		seed = (x & 0xFFFFFFF) << 16 | (y & 0xFFFFFFF)
 		random.seed(seed)
 		self.starExists = random.randint(0, 40) == 1
 		if not self.starExists:
