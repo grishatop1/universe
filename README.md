@@ -1,2 +1,2 @@
 # universe
-An infinity procedurally generated universe with python.
+An infinite universe procedurally generated with python.
