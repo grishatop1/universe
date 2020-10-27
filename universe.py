@@ -310,7 +310,7 @@ while running:
 				if (mos_x - rel_x_center)**2 + (mos_y - rel_y_center)**2 < (orbit+10)**2:
 					if (mos_x - rel_x_center)**2 + (mos_y - rel_y_center)**2 > (orbit-10)**2:
 						pygame.draw.circle(win, WHITE, (int(planet_x), int(planet_y)), planet.radius+3, 2)
-						pygame.draw.circle(win, WHITE, (rel_x_center, rel_y_center), orbit, 3)
+						pygame.draw.circle(win, WHITE, (rel_x_center, rel_y_center), orbit+1, 3)
 
 						texts = []
 
@@ -319,14 +319,13 @@ while running:
 						texts.append(font_info.render(f"Resources: {round(planet.resources)}%", True, WHITE))
 						texts.append(font_info.render(f"Water: {round(planet.water)}%", True, WHITE))
 						texts.append(font_info.render(f"Temperature: {planet.temperature}K", True, WHITE))
-						texts.append(font_info.render(f"Moons: {len(planet.moons)}", True, WHITE))
 						texts.append(font_info.render(f"Name: {planet.name}", True, WHITE))
 
 						
 						text_height = texts[0].get_height()
 						text_offset = -text_height
 						for text in texts:
-							win.blit(text, (rel_x, height+text_offset))
+							win.blit(text, (rel_x+3, height+text_offset))
 							text_offset -= text_height
 
 
@@ -352,13 +351,11 @@ while running:
 	
 	try:
 			cords = font.render(f"X:{str(cam.x)}, Y: {str(cam.y)}", True, WHITE)
-			win.blit(cords, CORD_POS)
 	except:
-			cords = font.render(f"You are too far from the center. Don't get lost", True, WHITE)
-			win.blit(cords, CORD_POS)
-
+			cords = font.render(f"You are too far from the center. Don't get lost", True, WHITE)		
 	fps = font.render(f"FPS: {str(int(clock.get_fps()))}", True, WHITE)
 	win.blit(fps, FPS_POS)
+	win.blit(cords, CORD_POS)
 
 	pygame.display.flip()
 	for event in pygame.event.get():
