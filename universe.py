@@ -228,16 +228,6 @@ while running:
 			star = Star(x + cam.x, y + cam.y, False)
 			if star.starExists:
 				center = (x*SEGMENTS+SEGMENTS//2, y*SEGMENTS+SEGMENTS//2)
-
-				for (n_x, n_y) in [(0,1), (0,-1), (1, 0), (-1, 0), (1,1), (1,-1), (-1, 1), (-1, -1),
-									(0,2), (0,-2), (2, 0), (-2, 0), (2,2), (2,-2), (-2, 2), (-2, -2)]:
-					neight_star = Star(x + n_x + cam.x, y + n_y + cam.y, False)
-					if neight_star.starExists:
-						pygame.draw.line(win, pygame.Color("yellow"), 	
-										center, 
-										(x*SEGMENTS+n_x*SEGMENTS+SEGMENTS//2, 
-										y*SEGMENTS+n_y*SEGMENTS+SEGMENTS//2), 2)
-
 				pygame.draw.circle(win, star.color, center, star.radius)
 
 
