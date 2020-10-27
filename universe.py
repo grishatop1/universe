@@ -6,6 +6,7 @@ import threading
 import os
 import time
 from math import cos, sin
+from perlin import PerlinNoiseFactory
 
 pygame.init()
 os.environ['SDL_VIDEO_CENTERED'] = '1' #center window
@@ -170,7 +171,7 @@ font_info = pygame.font.SysFont("Arial", 25)
 
 def get_mouse_in_segment(galaxy=True):
 	mos_pos = pygame.mouse.get_pos()
-	mos_pos = (mos_pos[0]//SEGMENTS, mos_pos[1]//SEGMENTS) #pozicija misa na ekranu
+	mos_pos = (mos_pos[0]//SIZE, mos_pos[1]//SIZE) #pozicija misa na ekranu
 	mos_galaxy = (mos_pos[0] + cam.x, mos_pos[1] + cam.y) #pozicija misa u svemiru
 
 	if galaxy:
@@ -218,10 +219,10 @@ while running:
 
 	for x in range(SECTORS_X):
 		for y in range(SECTORS_Y):
-			#pygame.draw.rect(win, WHITE, (x*SEGMENTS,y*SEGMENTS,SEGMENTS,SEGMENTS), 1)
+			#pygame.draw.rect(win, WHITE, (x*SIZE,y*SIZE,SIZE,SIZE), 1)
 			star = Star(x + cam.x, y + cam.y, False)
 			if star.starExists:
-				center = (x*SEGMENTS+SEGMENTS//2, y*SEGMENTS+SEGMENTS//2)
+				center = (x*SIZE+SIZE//2, y*SIZE+SIZE//2)
 				pygame.draw.circle(win, star.color, center, star.radius)
 				#renderuje zvijezde bez generisanja detalja (samo izgleda)
 
@@ -233,9 +234,9 @@ while running:
 	star = Star(x, y)
 	if star.starExists:
 		x, y = x-cam.x, y-cam.y
-		center = (x*SEGMENTS+SEGMENTS//2, y*SEGMENTS+SEGMENTS//2)
-		if x > -SECTORS_X and x < SEGMENTS:
-			if y > -SECTORS_Y and y < SEGMENTS:
+		center = (x*SIZE+SIZE//2, y*SIZE+SIZE//2)
+		if x > -SECTORS_X and x < SIZE:
+			if y > -SECTORS_Y and y < SIZE:
 				#ako je x,y u ekranu onda radi slijedece:
 				pygame.draw.circle(win, WHITE, center, star.radius+5, 1)
 				name_text = font_star.render(star.name, True, WHITE)
@@ -252,8 +253,8 @@ while running:
 		rel_x = 0
 		rel_y = HEIGHT-height - border
 
-		if x*SEGMENTS <= rel_x + width:
-			#if y*SEGMENTS >= rel_y and y*SEGMENTS <= rel_y+height:
+		if x*SIZE <= rel_x + width:
+			#if y*SIZE >= rel_y and y*SIZE <= rel_y+height:
 			#ako je x na lijevoj strani onda prikaze podatke na desnoj
 			rel_x = WIDTH-width-border
 			rel_y = 0 - border
@@ -330,8 +331,30 @@ while running:
 							text_offset -= text_height
 
 
-			pygame.draw.circle(win, BLUE if planet.water and not planet.life else GREEN if planet.life else GAS if planet.gas_giant else BROWN, 
-							(int(planet_x), int(planet_y)), planet.radius)
+
+						map_size = 300
+						size = 10
+						sectors = map_size//size
+						map_rel_x = rel_x+width-map_size
+						map_rel_y = rel_y
+
+						prl = PerlinNoiseFactory(2)
+						for x in range(sectors):
+							for y in range(sectors):
+								n = prl(x/size, y/size)
+								if n > 0.10:
+									color = BROWN
+								else:
+									color = pygame.Color("gray")
+
+								pygame.draw.rect(win, color, (x*size+map_rel_x, y*size+map_rel_y, size, size))
+
+						pygame.draw.rect(win, WHITE, (map_rel_x, map_rel_y, map_size, map_size), 1)
+
+				pygame.draw.circle(win, BLUE if planet.water and not planet.life else GREEN if planet.life else GAS if planet.gas_giant else BROWN, 
+					(int(planet_x), int(planet_y)), planet.radius)
+
+
 			orbit += 45
 
 		if clicked() == 1:
@@ -349,6 +372,21 @@ while running:
 			if not selected:
 				selected = True
 				selectedStar = [x,y]
+
+	"""
+	prl = PerlinNoiseFactory(2)
+	for x in range(25):
+		for y in range(25):
+			n = prl(x/5, y/5)
+
+			if n > 0.10:
+				color = BROWN
+			else:
+				color = pygame.Color("gray")
+
+			pygame.draw.rect(win, color, (x*5, y*5, 10, 10))
+	"""
+			
 	
 	try:
 			cords = font.render(f"X:{str(cam.x)}, Y: {str(cam.y)}", True, WHITE)

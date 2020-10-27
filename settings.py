@@ -3,7 +3,7 @@ import pygame
 TITLE = "Universe!"
 
 #segment size
-SEGMENTS = 40
+SIZE = 40
 
 #best resolution
 WIDTH = 1240 
@@ -12,8 +12,8 @@ HEIGHT = 720
 HALF_WIDTH = WIDTH//2
 HALF_HEIGHT = HEIGHT//2
 
-SECTORS_X = WIDTH//SEGMENTS
-SECTORS_Y = HEIGHT//SEGMENTS
+SECTORS_X = WIDTH//SIZE
+SECTORS_Y = HEIGHT//SIZE
 
 FPS_POS = (0, 30)
 CORD_POS = (0,0)
