@@ -67,7 +67,7 @@ class Planet:
 		self.name = ""
 		self.t = 0
 		self.reversedRotation = False
-		self.water = False
+		self.hasWater = False
 		self.life = False
 		self.ring = False
 		self.temperature = 0 #kelvin
@@ -75,6 +75,7 @@ class Planet:
 		self.moons = []
 
 		self.gases = 0.0
+		self.water = 0.0
 		self.minerals = 0.0
 		self.resources = 0.0
 		self.population = 0
@@ -107,15 +108,15 @@ class Star:
 			p.t = random.randint(0,360)
 			nMoons = random.randint(-5, 3)
 			for _ in range(nMoons):
-					t = random.randint(0,360)
-					reversedRotation = random.randint(0,20)==1
-					p.moons.append([t, reversedRotation])
+				t = random.randint(0,360)
+				reversedRotation = random.randint(0,20)==1
+				p.moons.append([t, reversedRotation])
 					
 			if p.radius >= 10: p.gas_giant = random.randint(0,20) == 1
 			if not p.gas_giant:
-					p.water = random.randint(0,150) == 1
-					if p.water:
-							p.life = random.randint(0,20) == 1
+				p.hasWater = random.randint(0,100) == 1
+				if p.hasWater:
+					p.life = random.randint(0,20) == 1
 		
 			p.ring = random.randint(0,10) == 1
 			p.temperature = random.randint(0, 400)
@@ -125,14 +126,17 @@ class Star:
 				p.gases = 1.0
 				p.minerals = 0.0
 				p.resources = 0.0
+				p.water = 0.0
 			else:
 				p.gases = random.random()
 				p.minerals = random.random()
 				p.resources = random.random()
-			final = 1.0 / (p.gases + p.minerals + p.resources)
+				if p.hasWater: p.water = random.random()
+			final = 1.0 / (p.gases + p.minerals + p.resources + p.water)
 			p.gases *= final * 100
 			p.minerals *= final * 100
 			p.resources *= final * 100
+			p.water *= final * 100
 			#Ovaj dio sluzi da izracuna procenat %
 			self.planets.append(p)
 
@@ -334,6 +338,7 @@ while running:
 						texts.append(font_info.render(f"Gases: {round(planet.gases)}%", True, WHITE))
 						texts.append(font_info.render(f"Minerals: {round(planet.minerals)}%", True, WHITE))
 						texts.append(font_info.render(f"Resources: {round(planet.resources)}%", True, WHITE))
+						texts.append(font_info.render(f"Water: {round(planet.water)}%", True, WHITE))
 						texts.append(font_info.render(f"Temperature: {planet.temperature}K", True, WHITE))
 						texts.append(font_info.render(f"Moons: {len(planet.moons)}", True, WHITE))
 						texts.append(font_info.render(f"Name: {planet.name}", True, WHITE))
