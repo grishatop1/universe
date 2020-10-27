@@ -90,6 +90,9 @@ class Star:
 
 		self.color = random.choice(colors)
 		self.radius = random.randint(5, 22)
+
+		#Ako mi treba samo da prikaze zvijezdu ne mora onda generisati sve planete i detalje o njoj
+		#nego samo izgled
 		if not generateSystem: 
 				return
 
@@ -130,6 +133,7 @@ class Star:
 			p.gases *= final * 100
 			p.minerals *= final * 100
 			p.resources *= final * 100
+			#Ovaj dio sluzi da izracuna procenat %
 			self.planets.append(p)
 
 
@@ -160,12 +164,13 @@ class Camera:
 				pressed = True
 
 		if key[pygame.K_v]:
-				try:
-						x, y = pyperclip.paste().split(":")
-						x, y = int(x), int(y)
-						self.teleport(x, y)
-				except:
-						return
+			#ako se pritisne V onda uzme od clipboarda podatke
+			try:
+				x, y = pyperclip.paste().split(":")
+				x, y = int(x), int(y)
+				self.teleport(x, y)
+			except:
+				return
 
 		return pressed
 
@@ -182,8 +187,8 @@ font_info = pygame.font.SysFont("Arial", 25)
 
 def get_mouse_in_segment(galaxy=True):
 	mos_pos = pygame.mouse.get_pos()
-	mos_pos = (mos_pos[0]//SEGMENTS, mos_pos[1]//SEGMENTS)
-	mos_galaxy = (mos_pos[0] + cam.x, mos_pos[1] + cam.y)
+	mos_pos = (mos_pos[0]//SEGMENTS, mos_pos[1]//SEGMENTS) #pozicija misa na ekranu
+	mos_galaxy = (mos_pos[0] + cam.x, mos_pos[1] + cam.y) #pozicija misa u svemiru
 
 	if galaxy:
 		return mos_galaxy
@@ -199,6 +204,7 @@ def clicked():
 		return 2
 
 def command():
+	#Konzola thread
 	print("To change coords use this format - x:y or use WASD")
 	while True:
 		coords = input(">>> ")
@@ -234,6 +240,7 @@ while running:
 			if star.starExists:
 				center = (x*SEGMENTS+SEGMENTS//2, y*SEGMENTS+SEGMENTS//2)
 				pygame.draw.circle(win, star.color, center, star.radius)
+				#renderuje zvijezde bez generisanja detalja (samo izgleda)
 
 
 	if selected:
@@ -246,6 +253,7 @@ while running:
 		center = (x*SEGMENTS+SEGMENTS//2, y*SEGMENTS+SEGMENTS//2)
 		if x > -SECTORS_X and x < SEGMENTS:
 			if y > -SECTORS_Y and y < SEGMENTS:
+				#ako je x,y u ekranu onda radi slijedece:
 				pygame.draw.circle(win, WHITE, center, star.radius+5, 1)
 				name_text = font_star.render(star.name, True, WHITE)
 				name_w = name_text.get_width()
@@ -263,6 +271,7 @@ while running:
 
 		if x*SEGMENTS <= rel_x + width:
 			#if y*SEGMENTS >= rel_y and y*SEGMENTS <= rel_y+height:
+			#ako je x na lijevoj strani onda prikaze podatke na desnoj
 			rel_x = WIDTH-width-border
 			rel_y = 0 - border
 
@@ -289,6 +298,7 @@ while running:
 		for text in reversed(texts):
 			win.blit(text, (rel_x+width-text_width, height+text_offset))
 			text_offset -= text_height
+			#Render textova
 
 
 		orbit = star.radius*2 + 25
