@@ -293,8 +293,6 @@ while running:
 			planet_x = orbit * cos(planet.t) + rel_x_center
 			planet_y = orbit * sin(planet.t) + rel_y_center
 
-			pygame.draw.circle(win, WHITE, (rel_x_center, rel_y_center), orbit, 1)
-
 			if planet.moons:
 				moon_orbit = planet.radius + 10
 				for n, (t, reversedRotation) in enumerate(planet.moons):
@@ -351,8 +349,10 @@ while running:
 
 						pygame.draw.rect(win, WHITE, (map_rel_x, map_rel_y, map_size, map_size), 1)
 
-				pygame.draw.circle(win, BLUE if planet.water and not planet.life else GREEN if planet.life else GAS if planet.gas_giant else BROWN, 
-					(int(planet_x), int(planet_y)), planet.radius)
+			pygame.draw.circle(win, WHITE, (rel_x_center, rel_y_center), orbit, 1)
+			pygame.draw.circle(win, BLUE if planet.water and not planet.life else GREEN if planet.life else GAS if planet.gas_giant else BROWN, 
+				(int(planet_x), int(planet_y)), planet.radius)
+
 
 
 			orbit += 45
