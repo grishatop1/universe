@@ -24,6 +24,11 @@ sred=["go","ri","mi","tri","ko","li","sta","si","li","sa","ve","tja","lo","ri","
 		  "ci","ri","ja","hu","a","dzu","tu","re","mi","ho","di","mir","sti"]
 zadn=["fan","gej","je","na","vle","jo","ja","ta","lo","mir","ca","djan","ven","ka","va","ljub","slav","ko","tar","sa","nja","bor","ja","din","lah","suf","da","sus","dolf","sta","sto"]
 
+star_types = {"Gentle": (255,255,255), 
+			"Temperate": (255,195,48), 
+			"Radioactive": (247,255,167), 
+			"Frozen": (132,159,255), 
+			"Fiery": (255,81,12)}
 
 def namer():
 		middle=''
@@ -68,7 +73,8 @@ class Star:
 		if not self.starExists:
 				return
 
-		self.color = random.choice(colors)
+		self.type = random.choice(list(star_types))
+		self.color = star_types[self.type]
 		self.radius = random.randint(5, 22)
 
 		#Ako mi treba samo da prikaze zvijezdu ne mora onda generisati sve planete i detalje o njoj
@@ -270,7 +276,7 @@ while running:
 
 		texts = []
 		texts.append(font_info.render(f"Name: {star.name}", True, WHITE))
-		texts.append(font_info.render(f"Type: None", True, WHITE))
+		texts.append(font_info.render(f"Type: {star.type}", True, WHITE))
 		texts.append(font_info.render(f"Number of planets: {len(star.planets)}", True, WHITE))
 		
 
