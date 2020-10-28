@@ -53,7 +53,8 @@ star_types = [
 	StarType("Temperate", (255,81,12), (150, 450)), #pakao
 	StarType("Frozen", (125,192,255), (-300, -100)),
 	StarType("Radioactive", (255,234,100), (30,70), life=True),
-	StarType("Acid", (160,255,0), (-120, 120))
+	StarType("Acid", (160,255,0), (-120, 120)),
+	StarType("Black Hole", (0,0,0), (-273, -273))
 ]
 
 class Planet:
