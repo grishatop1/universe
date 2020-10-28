@@ -24,11 +24,6 @@ sred=["go","ri","mi","tri","ko","li","sta","si","li","sa","ve","tja","lo","ri","
 		  "ci","ri","ja","hu","a","dzu","tu","re","mi","ho","di","mir","sti"]
 zadn=["fan","gej","je","na","vle","jo","ja","ta","lo","mir","ca","djan","ven","ka","va","ljub","slav","ko","tar","sa","nja","bor","ja","din","lah","suf","da","sus","dolf","sta","sto"]
 
-star_types = {"Gentle": (255,255,255), 
-			"Temperate": (255,195,48), 
-			"Radioactive": (247,255,167), 
-			"Frozen": (132,159,255), 
-			"Fiery": (255,81,12)}
 
 def namer():
 		middle=''
@@ -45,6 +40,22 @@ def planet_namer():
 
 	return output
 
+class StarType:
+	def __init__(self, name, color, temperature, life=False):
+		self.name = name #Ime vrste // string
+		self.color = color #Boja zvijezde // tuple(R,G,B)
+		self.temperature = temperature #Temperatura planeta u celsiusu // tuple(od, do)
+		self.life = life #Dal planete mogu imati zivot // True False
+
+#ovdje dodavaj vrste zvijezda
+star_types = [
+	StarType("Gentle", (255,255,255), (10,40), life=True),
+	StarType("Temperate", (255,81,12), (150, 450)), #pakao
+	StarType("Frozen", (125,192,255), (-300, -100)),
+	StarType("Radioactive", (255,234,100), (30,70), life=True),
+	StarType("Acid", (160,255,0), (-120, 120))
+]
+
 class Planet:
 	def __init__(self):
 		self.radius = 0
@@ -54,7 +65,7 @@ class Planet:
 		self.hasWater = False
 		self.life = False
 		self.ring = False
-		self.temperature = 0 #kelvin
+		self.temperature = 0 #celsius
 		self.gas_giant = False
 		self.moons = []
 
@@ -73,14 +84,14 @@ class Star:
 		if not self.starExists:
 				return
 
-		self.type = random.choice(list(star_types))
-		self.color = star_types[self.type]
+		self.type = random.choice(star_types)
+		self.color = self.type.color
 		self.radius = random.randint(5, 22)
 
 		#Ako mi treba samo da prikaze zvijezdu ne mora onda generisati sve planete i detalje o njoj
 		#nego samo izgled
 		if not generateSystem: 
-				return
+			return
 
 		self.name = namer()
 		self.planets = []
@@ -89,22 +100,26 @@ class Star:
 			p = Planet()
 			p.name = namer()
 			p.radius = random.randint(5,12)
-			p.reversedRotation = random.randint(0,200)==1
+			p.reversedRotation = random.randint(0,150)==1
 			p.t = random.randint(0,360)
-			nMoons = random.randint(-5, 3)
+			nMoons = random.randint(-5, 3) #-5 da budu vece sanse da nemaju nista nego da svaka ima satelit
 			for _ in range(nMoons):
 				t = random.randint(0,360)
 				reversedRotation = random.randint(0,20)==1
 				p.moons.append([t, reversedRotation])
-					
-			if p.radius >= 10: p.gas_giant = random.randint(0,20) == 1
-			if not p.gas_giant:
-				p.hasWater = random.randint(0,100) == 1
-				if p.hasWater:
-					p.life = random.randint(0,20) == 1
-		
+
+
 			p.ring = random.randint(0,10) == 1
-			p.temperature = random.randint(0, 400)
+			p.temperature = random.randint(*self.type.temperature)
+
+			if p.radius >= 10: 
+				p.gas_giant = random.randint(0,5) == 1
+
+			if not p.gas_giant:
+				if p.temperature > 0 and p.temperature < 100:
+					p.hasWater = random.randint(0,50) == 1
+					if p.hasWater and self.type.life:
+						p.life = random.randint(0,10) == 1
 
 			
 			if p.gas_giant:
@@ -276,7 +291,7 @@ while running:
 
 		texts = []
 		texts.append(font_info.render(f"Name: {star.name}", True, WHITE))
-		texts.append(font_info.render(f"Type: {star.type}", True, WHITE))
+		texts.append(font_info.render(f"Type: {star.type.name}", True, WHITE))
 		texts.append(font_info.render(f"Number of planets: {len(star.planets)}", True, WHITE))
 		
 
@@ -324,7 +339,7 @@ while running:
 						texts.append(font_info.render(f"Minerals: {round(planet.minerals)}%", True, WHITE))
 						texts.append(font_info.render(f"Resources: {round(planet.resources)}%", True, WHITE))
 						texts.append(font_info.render(f"Water: {round(planet.water)}%", True, WHITE))
-						texts.append(font_info.render(f"Temperature: {planet.temperature}K", True, WHITE))
+						texts.append(font_info.render(f"Temperature: {planet.temperature}C", True, WHITE))
 						texts.append(font_info.render(f"Name: {planet.name}", True, WHITE))
 
 						
