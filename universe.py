@@ -41,11 +41,12 @@ def planet_namer():
 	return output
 
 class StarType:
-	def __init__(self, name, color, temperature, life=False):
+	def __init__(self, name, color, temperature, life=False, chance=(0,40)):
 		self.name = name #Ime vrste // string
 		self.color = color #Boja zvijezde // tuple(R,G,B)
 		self.temperature = temperature #Temperatura planeta u celsiusu // tuple(od, do)
 		self.life = life #Dal planete mogu imati zivot // True False
+		self.chance = chance
 
 #ovdje dodavaj vrste zvijezda
 star_types = [
@@ -53,7 +54,8 @@ star_types = [
 	StarType("Temperate", (255,81,12), (150, 450)), #pakao
 	StarType("Frozen", (125,192,255), (-300, -100)),
 	StarType("Radioactive", (255,234,100), (30,70), life=True),
-	StarType("Acid", (160,255,0), (-120, 120))
+	StarType("Acid", (160,255,0), (-120, 120), chance=(0,80)),
+	StarType("Black Hole", (10,10,10), (-273, -200), chance=(0,250))
 ]
 
 class Planet:
@@ -80,11 +82,11 @@ class Star:
 	def __init__(self, x, y, generateSystem=True):
 		seed = (x & 0xFFFF) << 16 | (y & 0xFFFF)
 		random.seed(seed)
-		self.starExists = random.randint(0, 40) == 1
+		self.type = random.choice(star_types)
+		self.starExists = random.randint(*self.type.chance) == 1
 		if not self.starExists:
 				return
 
-		self.type = random.choice(star_types)
 		self.color = self.type.color
 		self.radius = random.randint(5, 22)
 
