@@ -365,7 +365,7 @@ while running:
 		x, y = get_mouse_in_segment()
 		star = Star(x, y, False)
 		if star.starExists:
-			pyperclip.copy(f"{x + cam.x - (SECTORS_X//2)}:{y + cam.y - (SECTORS_Y//2)}")
+			pyperclip.copy(f"{x - (SECTORS_X//2)}:{y - (SECTORS_Y//2)}")
 			if not selected:
 				selected = True
 				selectedStar = [x,y]
