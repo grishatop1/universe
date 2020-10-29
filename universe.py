@@ -50,12 +50,13 @@ class StarType:
 
 #ovdje dodavaj vrste zvijezda
 star_types = [
-	StarType("Gentle", (255,255,255), (10,40), life=True),
+	StarType("Gentle", (255,200,255), (10,40), life=True),
 	StarType("Temperate", (255,81,12), (150, 450)), #pakao
 	StarType("Frozen", (125,192,255), (-300, -100)),
 	StarType("Radioactive", (255,234,100), (30,70), life=True),
 	StarType("Acid", (160,255,0), (-120, 120), chance=(0,80)),
-	StarType("Black Hole", (10,10,10), (-273, -200), chance=(0,250))
+	StarType("Black Hole", (10,10,10), (-273, -200), chance=(0,250)),
+	StarType("White Hole", (255,255,255), (69, 420), chance=(0,1000), life=True)
 ]
 
 class Planet:
