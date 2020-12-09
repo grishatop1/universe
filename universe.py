@@ -153,21 +153,24 @@ class Camera:
 	def move(self):
 		pressed = False
 		key = pygame.key.get_pressed()
+		speed = self.speed
+		if key[pygame.K_LSHIFT]:
+			speed += 2
 
 		if key[pygame.K_w]:
-				self.y -= self.speed
+				self.y -= speed
 				pressed = True
 
 		if key[pygame.K_s]:
-				self.y += self.speed
+				self.y += speed
 				pressed = True
 
 		if key[pygame.K_a]:
-				self.x -= self.speed
+				self.x -= speed
 				pressed = True
 
 		if key[pygame.K_d]:
-				self.x += self.speed
+				self.x += speed
 				pressed = True
 
 		if key[pygame.K_v]:
