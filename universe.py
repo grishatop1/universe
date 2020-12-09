@@ -156,6 +156,8 @@ class Camera:
 		speed = self.speed
 		if key[pygame.K_LSHIFT]:
 			speed += 2
+			if key[pygame.K_LCTRL]:
+				speed += 100
 
 		if key[pygame.K_w]:
 				self.y -= speed
