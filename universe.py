@@ -77,12 +77,12 @@ class Planet:
 		self.minerals = 0.0
 		self.resources = 0.0
 		self.population = 0
-				
+
 
 class Star:
 	def __init__(self, x, y, generateSystem=True):
-		seed = (x & 0xFFFF) << 16 | (y & 0xFFFF)
-		random.seed(seed)
+		self.seed = (x & 0xFFFFFFFFFFFFFFFF) << 64 | (y & 0xFFFFFFFFFFFFFFFF)
+		random.seed(self.seed)
 		self.type = random.choice(star_types)
 		self.starExists = random.randint(*self.type.chance) == 1
 		if not self.starExists:
@@ -93,7 +93,7 @@ class Star:
 
 		#Ako mi treba samo da prikaze zvijezdu ne mora onda generisati sve planete i detalje o njoj
 		#nego samo izgled
-		if not generateSystem: 
+		if not generateSystem:
 			return
 
 		self.name = namer()
@@ -115,7 +115,7 @@ class Star:
 			p.ring = random.randint(0,10) == 1
 			p.temperature = random.randint(*self.type.temperature)
 
-			if p.radius >= 10: 
+			if p.radius >= 10:
 				p.gas_giant = random.randint(0,5) == 1
 
 			if not p.gas_giant:
@@ -124,7 +124,7 @@ class Star:
 					if p.hasWater and self.type.life:
 						p.life = random.randint(0,10) == 1
 
-			
+
 			if p.gas_giant:
 				p.gases = 1.0
 				p.minerals = 0.0
@@ -186,7 +186,7 @@ class Camera:
 
 		return pressed
 
-			
+
 	def teleport(self, x, y):
 		self.x = x
 		self.y = y
@@ -301,7 +301,8 @@ while running:
 		texts.append(font_info.render(f"Name: {star.name}", True, WHITE))
 		texts.append(font_info.render(f"Type: {star.type.name}", True, WHITE))
 		texts.append(font_info.render(f"Number of planets: {len(star.planets)}", True, WHITE))
-		
+		texts.append(font_info.render(f"Star seed: {star.seed}", True, WHITE))
+
 
 
 		text_width = texts[2].get_width()
@@ -350,7 +351,7 @@ while running:
 						texts.append(font_info.render(f"Temperature: {planet.temperature}C", True, WHITE))
 						texts.append(font_info.render(f"Name: {planet.name}", True, WHITE))
 
-						
+
 						text_height = texts[0].get_height()
 						text_offset = -text_height
 						for text in texts:
@@ -358,7 +359,7 @@ while running:
 							text_offset -= text_height
 
 
-			pygame.draw.circle(win, BLUE if planet.water and not planet.life else GREEN if planet.life else GAS if planet.gas_giant else BROWN, 
+			pygame.draw.circle(win, BLUE if planet.water and not planet.life else GREEN if planet.life else GAS if planet.gas_giant else BROWN,
 							(int(planet_x), int(planet_y)), planet.radius)
 			orbit += 45
 
@@ -377,11 +378,11 @@ while running:
 			if not selected:
 				selected = True
 				selectedStar = [x,y]
-	
+
 	try:
 			cords = font.render(f"X:{str(cam.x)}, Y: {str(cam.y)}", True, WHITE)
 	except:
-			cords = font.render(f"You are too far from the center. Don't get lost", True, WHITE)		
+			cords = font.render(f"You are too far from the center. Don't get lost", True, WHITE)
 	fps = font.render(f"FPS: {str(int(clock.get_fps()))}", True, WHITE)
 	win.blit(fps, FPS_POS)
 	win.blit(cords, CORD_POS)
