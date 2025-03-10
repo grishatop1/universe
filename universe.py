@@ -40,6 +40,18 @@ def planet_namer():
 
 	return output
 
+def map_to_non_negative(n):
+    if n >= 0:
+        return 2 * n  # Positive numbers map to even: 0 -> 0, 1 -> 2, 2 -> 4, ...
+    else:
+        return 2 * abs(n) - 1  # Negative numbers map to odd: -1 -> 1, -2 -> 3, ...
+
+def cantor_pairing(x, y):
+    x_mapped = map_to_non_negative(x)
+    y_mapped = map_to_non_negative(y)
+    seed = (x_mapped + y_mapped) * (x_mapped + y_mapped + 1) // 2 + y_mapped
+    return seed
+
 class StarType:
 	def __init__(self, name, color, temperature, life=False, chance=(0,40)):
 		self.name = name #Ime vrste // string
@@ -81,7 +93,7 @@ class Planet:
 
 class Star:
 	def __init__(self, x, y, generateSystem=True):
-		self.seed = (x & 0xFFFFFFFFFFFFFFFF) << 64 | (y & 0xFFFFFFFFFFFFFFFF)
+		self.seed = cantor_pairing(x, y)
 		random.seed(self.seed)
 		self.type = random.choice(star_types)
 		self.starExists = random.randint(*self.type.chance) == 1
