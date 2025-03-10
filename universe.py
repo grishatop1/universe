@@ -301,7 +301,7 @@ while running:
 		texts.append(font_info.render(f"Name: {star.name}", True, WHITE))
 		texts.append(font_info.render(f"Type: {star.type.name}", True, WHITE))
 		texts.append(font_info.render(f"Number of planets: {len(star.planets)}", True, WHITE))
-		texts.append(font_info.render(f"Star seed: {star.seed}", True, WHITE))
+		#texts.append(font_info.render(f"Star seed: {star.seed}", True, WHITE))
 
 
 
